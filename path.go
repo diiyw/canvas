@@ -2301,47 +2301,6 @@ func (p *Path) ToPS() string {
 	return sb.String()[1:] // remove the first space
 }
 
-// ToPDF returns a string that represents the path in the PDF data format.
-func (p *Path) ToPDF() string {
-	if p.Empty() {
-		return ""
-	}
-	p = p.ReplaceArcs()
-
-	sb := strings.Builder{}
-	var x, y float64
-	for i := 0; i < len(p.d); {
-		cmd := p.d[i]
-		switch cmd {
-		case MoveToCmd:
-			x, y = p.d[i+1], p.d[i+2]
-			fmt.Fprintf(&sb, " %v %v m", dec(x), dec(y))
-		case LineToCmd:
-			x, y = p.d[i+1], p.d[i+2]
-			fmt.Fprintf(&sb, " %v %v l", dec(x), dec(y))
-		case QuadToCmd, CubeToCmd:
-			var start, cp1, cp2 Point
-			start = Point{x, y}
-			if cmd == QuadToCmd {
-				x, y = p.d[i+3], p.d[i+4]
-				cp1, cp2 = quadraticToCubicBezier(start, Point{p.d[i+1], p.d[i+2]}, Point{x, y})
-			} else {
-				cp1 = Point{p.d[i+1], p.d[i+2]}
-				cp2 = Point{p.d[i+3], p.d[i+4]}
-				x, y = p.d[i+5], p.d[i+6]
-			}
-			fmt.Fprintf(&sb, " %v %v %v %v %v %v c", dec(cp1.X), dec(cp1.Y), dec(cp2.X), dec(cp2.Y), dec(x), dec(y))
-		case ArcToCmd:
-			panic("arcs should have been replaced")
-		case CloseCmd:
-			x, y = p.d[i+1], p.d[i+2]
-			fmt.Fprintf(&sb, " h")
-		}
-		i += cmdLen(cmd)
-	}
-	return sb.String()[1:] // remove the first space
-}
-
 // ToVectorRasterizer rasterizes the path to *vector.Rasterizer using the given rasterizer and resolution.
 func (p *Path) ToVectorRasterizer(ras *vector.Rasterizer, resolution Resolution) {
 	dpmm := resolution.DPMM()
@@ -2395,8 +2354,8 @@ func (p *Path) ToVectorRasterizer(ras *vector.Rasterizer, resolution Resolution)
 func fixedPoint26_6(x, y float64) fixed.Point26_6 {
 	const Scale = float64(int(1) << 6)
 	return fixed.Point26_6{
-		fixed.Int26_6(x*Scale + 0.5),
-		fixed.Int26_6(y*Scale + 0.5),
+		X: fixed.Int26_6(x*Scale + 0.5),
+		Y: fixed.Int26_6(y*Scale + 0.5),
 	}
 }
 
