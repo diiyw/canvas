@@ -1,4 +1,4 @@
-module github.com/tdewolff/canvas
+module github.com/diiyw/canvas
 
 go 1.23.0
 
@@ -33,6 +33,7 @@ require (
 	github.com/campoy/embedmd v1.0.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c // indirect
 	github.com/srwiley/scanFT v0.0.0-20220128184157-0d1ee492111f // indirect
 	golang.org/x/text v0.25.0 // indirect
 	modernc.org/knuth v0.5.5 // indirect
@@ -40,7 +41,6 @@ require (
 )
 
 require (
-	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	golang.org/x/net v0.40.0
 	star-tex.org/x/tex v0.7.1
